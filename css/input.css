@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+
+.btn {
+    @apply font-bold py-2 px-4 rounded border shadow-sm  hover:shadow-md transition-all;
+}
