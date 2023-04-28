@@ -25,12 +25,13 @@ class FileEntry {
 
 
 class Files {
+    static $storagePath = WRITEPATH . "storage";
     public static function ls(string $relativeStoragePath='') {
-        $storagePath = WRITEPATH . "storage/$relativeStoragePath";
+        $storagePath = rtrim(self::$storagePath . "/$relativeStoragePath", '/');
         $contents = array_diff(scandir($storagePath), ['.', '..']);
         $results = [];
         foreach ($contents as $entry) {
-            $filePath = $storagePath . $entry;
+            $filePath = "$storagePath/$entry";
             $results[] = new FileEntry($filePath);
         }
         return $results;
