@@ -11,7 +11,7 @@ class Home extends BaseController
     public function index()
     {
         $data['title'] = "Home Page!";
-        $files = Files::dirTree(Path::canonicalize(__DIR__ . '/../../writable/storage'));
+        $files = Files::ls();
         $data['files'] = $files;
         return 
         view('header', $data) 
