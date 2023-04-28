@@ -1,14 +1,13 @@
 <?php 
 include 'sidebar.php'; 
-use App\Libraries\Files;
 ?>
 
 <main class='px-8 py-16'>
     <?php foreach($files as $entry): ?>
         <?php if ($entry->is_dir): ?>
-            <?= "DIR: $entry"?>
+            <a href='<?= $entry->storagePath ?>' class='text-blue-700'><?= $entry->storagePath ?> </a>
         <?php else:?>
-            <?php echo $entry ?>
+            <?php echo $entry->storagePath ?>
         <?php endif ?>
         <br>
     <?php endforeach ?>

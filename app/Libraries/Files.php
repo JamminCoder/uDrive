@@ -4,10 +4,12 @@ namespace App\Libraries;
 
 class FileEntry {
     public string $path;
+    public string $storagePath;
     public bool $is_dir;
 
     public function __construct($path) {
         $this->path = $path;
+        $this->storagePath = '/storage/' . explode('/storage/', $path)[1];
         $this->is_dir = is_dir($path);
     }
 
@@ -26,8 +28,11 @@ class FileEntry {
 
 class Files {
     static $storagePath = WRITEPATH . "storage";
+    
     public static function ls(string $relativeStoragePath='') {
+        $relativeStoragePath = trim($relativeStoragePath, '/');
         $storagePath = rtrim(self::$storagePath . "/$relativeStoragePath", '/');
+
         $contents = array_diff(scandir($storagePath), ['.', '..']);
         $results = [];
         foreach ($contents as $entry) {

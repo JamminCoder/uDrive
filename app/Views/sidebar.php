@@ -1,4 +1,4 @@
-<aside class='w-60 h-[100vh] left-0 top-0 bg-slate-50 p-8 relative shadow-xl'>
+<aside class='w-60 h-[100vh] left-0 top-0 bg-slate-50 p-8 relative shadow-xl overflow-x-hidden'>
     <?php // Files::renderFileTree($files) ?>
     
     <div class='flex flex-col gap-4'>
