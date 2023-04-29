@@ -15,7 +15,7 @@ $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override(function () {
-    echo view('home');
+    echo view('react');
 });
 
 // The Auto Routing (Legacy) is very dangerous. It is easy to create vulnerable apps
@@ -32,9 +32,12 @@ $routes->set404Override(function () {
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-// $routes->get('/', 'Home::index');
-$routes->post('/upload', 'UploadController::upload');
-$routes->get('/storage/(.+)', 'FileServer::show/$1');
+
+$routes->group('api', static function ($routes) {
+    $routes->post('upload', 'UploadController::upload');
+    $routes->get('storage/', 'FileServer::show');
+    $routes->get('storage/(.+)', 'FileServer::show/$1');
+});
 
 /*
  * --------------------------------------------------------------------

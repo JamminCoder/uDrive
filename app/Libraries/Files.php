@@ -13,11 +13,19 @@ class FileEntry {
         $this->is_dir = is_dir($path);
     }
 
-    public function __toString() {
+    public function __toString(): string {
         return $this->path;
     }
 
-    public function __debugInfo() {
+    public function __debugInfo(): array {
+        return [
+            "path" => $this->path,
+            "is_dir" => $this->is_dir
+        ];
+    }
+
+    public function __serialize(): array
+    {
         return [
             "path" => $this->path,
             "is_dir" => $this->is_dir
@@ -29,10 +37,11 @@ class FileEntry {
 class Files {
     static $storagePath = WRITEPATH . "storage";
     
-    public static function ls(string $relativeStoragePath='') {
-        $relativeStoragePath = trim($relativeStoragePath, '/');
-        $storagePath = rtrim(self::$storagePath . "/$relativeStoragePath", '/');
+    public static function ls(string $relativeStoragePath='/') {
+        if ($relativeStoragePath != '/')
+            $relativeStoragePath = trim($relativeStoragePath, '/');
 
+        $storagePath = rtrim(self::$storagePath . "/$relativeStoragePath", '/');
         $contents = array_diff(scandir($storagePath), ['.', '..']);
         $results = [];
         foreach ($contents as $entry) {
