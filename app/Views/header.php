@@ -8,4 +8,4 @@
     <base href='/'/>
     <title>uDrive</title>
 </head>
-<body class="flex">
+<body>
