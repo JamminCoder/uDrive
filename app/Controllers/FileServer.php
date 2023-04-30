@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Controllers;
+use App\Libraries\Files;
 
 class FileServer extends BaseController {
-    public function show($path=false) {
+    public function index($path=false) {
         $path = join('/', func_get_args());
-        $files = \App\Libraries\Files::ls($path);
-        return $this->response->setJSON($files);
+        $files = Files::ls($path);
+        return $this->response->setJSON(['files' => $files]);
     }
 };

@@ -19,7 +19,9 @@ export default function App() {
     const storagePath = getStoragePath();
     useEffect(() => {
         axios.get('/api/storage' + storagePath)
-        .then(res => setFiles(res.data))
+        .then(res => {
+            if (res.data.files) setFiles(res.data.files);
+        })
         .catch(console.error);
     }, []);
 

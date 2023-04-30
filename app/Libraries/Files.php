@@ -38,10 +38,7 @@ class Files {
     static $storagePath = WRITEPATH . "storage";
     
     public static function ls(string $relativeStoragePath='/') {
-        if ($relativeStoragePath != '/')
-            $relativeStoragePath = trim($relativeStoragePath, '/');
-
-        $storagePath = rtrim(self::$storagePath . "/$relativeStoragePath", '/');
+        $storagePath = self::getStoragePath($relativeStoragePath);
         $contents = array_diff(scandir($storagePath), ['.', '..']);
         $results = [];
         foreach ($contents as $entry) {
@@ -49,6 +46,14 @@ class Files {
             $results[] = new FileEntry($filePath);
         }
         return $results;
+    }
+
+    public static function getStoragePath($relativeStoragePath) {
+        if ($relativeStoragePath != '/')
+        $relativeStoragePath = trim($relativeStoragePath, '/');
+
+        $storagePath = rtrim(self::$storagePath . "/$relativeStoragePath", '/');
+        return $storagePath;
     }
 }
 

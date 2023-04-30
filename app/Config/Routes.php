@@ -35,8 +35,8 @@ $routes->set404Override(function () {
 
 $routes->group('api', static function ($routes) {
     $routes->post('upload', 'UploadController::upload');
-    $routes->get('storage/', 'FileServer::show');
-    $routes->get('storage/(.+)', 'FileServer::show/$1');
+    $routes->get('storage/', 'FileServer::index');
+    $routes->get('storage/(.+)', 'FileServer::index/$1');
 });
 
 /*
