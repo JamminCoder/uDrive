@@ -9,7 +9,7 @@ class FileEntry {
 
     public function __construct($path) {
         $this->path = $path;
-        $this->storagePath = '/storage/' . explode('/storage/', $path)[1];
+        $this->storagePath = explode('/storage/', $path)[1];
         $this->is_dir = is_dir($path);
     }
 

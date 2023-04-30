@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import axios from 'axios';
-import FileSystemItem from '../components/FileSystemItem';
+import { RenderFiles } from '../components/Files';
 
 
 /**
@@ -29,10 +29,7 @@ export default function App() {
             <main className='p-8'>
                 <h1 className='text-2xl font-medium mb-8'>{ storagePath }</h1>
                 <section className='grid gap-4'>
-
-                    { files ? files.map(entry => 
-                        <FileSystemItem path={ entry.storagePath } isDir={ entry.is_dir } />
-                    ): ''}
+                    <RenderFiles files={ files } />
                 </section>
             </main>
         </div>
