@@ -9,8 +9,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx webpack --watch",
-    "css": "npx tailwindcss -i ./css/input.css -o ./public/css/tailwind.css --watch --minify"
+    "webpack": "npx webpack --watch",
+    "css": "npx tailwindcss -i ./css/input.css -o ./public/css/tailwind.css --watch --minify",
+    "dev": "node dev.js"
   },
   "keywords": [],
   "author": "",

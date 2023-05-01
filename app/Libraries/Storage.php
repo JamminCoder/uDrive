@@ -2,37 +2,8 @@
 
 namespace App\Libraries;
 
-class FileEntry {
-    public string $path;
-    public string $storagePath;
-    public bool $is_dir;
-
-    public function __construct($path) {
-        $this->path = $path;
-        $this->storagePath = explode('/storage/', $path)[1];
-        $this->is_dir = is_dir($path);
-    }
-
-    public function __toString(): string {
-        return $this->path;
-    }
-
-    public function __debugInfo(): array {
-        return [
-            "path" => $this->path,
-            "is_dir" => $this->is_dir
-        ];
-    }
-
-    public function __serialize(): array
-    {
-        return [
-            "path" => $this->path,
-            "is_dir" => $this->is_dir
-        ];
-    }
-}
-
+use App\Libraries\FileSystem\DirItem;
+use App\Libraries\FileSystem\FileItem;
 
 class Storage {
     static $root = WRITEPATH . "storage";
@@ -47,7 +18,12 @@ class Storage {
         $results = [];
         foreach ($contents as $entry) {
             $filePath = "$targetDirPath/$entry";
-            $results[] = new FileEntry($filePath);
+            if (is_file($filePath)) {
+                $results[] = new FileItem($filePath);
+                continue;
+            }
+
+            $results[] = new DirItem($filePath);
         }
         return $results;
     }

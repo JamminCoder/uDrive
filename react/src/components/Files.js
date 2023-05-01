@@ -2,13 +2,23 @@ import React from 'react';
 
 export function RenderFiles({ files }) {
     return files ? files.map(entry => 
-        <File path={ entry.storagePath } isDir={ entry.is_dir } />
-    ): ''
+        entry.isDir ? <Dir path={ entry.storagePath } />:
+
+        <File path={ entry.storagePath }/>
+    ): '';
 }
 
-export function File({ path, isDir }) {
+export function Dir({ path }) {
     return (
-        <a className={`${ isDir ? 'bg-blue-200 ': 'bg-blue-50 ' }p-2 rounded border block`} href={ '/storage/' + path }>
+        <a className='bg-blue-200 p-2 rounded border block' href={ '/storage/' + path }>
+            { path }
+        </a>
+    );
+}
+
+export function File({ path }) {
+    return (
+        <a className='bg-blue-50 p-2 rounded border block' href={ 'api/file/storage/' + path }>
             { path }
         </a>
     );
