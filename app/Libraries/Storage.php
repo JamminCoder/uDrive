@@ -38,12 +38,14 @@ class Storage {
     static $root = WRITEPATH . "storage";
     
     public static function ls(string $relativePath='/') {
-        $storagePath = self::getStoragePath($relativePath);
-        error_log($storagePath);
-        $contents = array_diff(scandir($storagePath), ['.', '..']);
+        $targetDirPath = self::getStoragePath($relativePath);
+
+        // ignore `.` and `..` listings
+        $contents = array_diff(scandir($targetDirPath), ['.', '..']);
+        
         $results = [];
         foreach ($contents as $entry) {
-            $filePath = "$storagePath/$entry";
+            $filePath = "$targetDirPath/$entry";
             $results[] = new FileEntry($filePath);
         }
         return $results;
