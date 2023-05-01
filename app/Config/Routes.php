@@ -37,6 +37,7 @@ $routes->group('api', static function ($routes) {
     $routes->post('upload', 'UploadController::upload');
     $routes->get('storage/', 'FileServer::index');
     $routes->get('storage/(.+)', 'FileServer::index/$1');
+    $routes->get('file/storage/(.+)', 'FileServer::serve/$1');
 });
 
 /*

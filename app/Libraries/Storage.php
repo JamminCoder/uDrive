@@ -39,6 +39,7 @@ class Storage {
     
     public static function ls(string $relativePath='/') {
         $targetDirPath = self::getStoragePath($relativePath);
+        if (!is_dir($targetDirPath)) return;
 
         // ignore `.` and `..` listings
         $contents = array_diff(scandir($targetDirPath), ['.', '..']);

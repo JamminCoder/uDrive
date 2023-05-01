@@ -9,4 +9,10 @@ class FileServer extends BaseController {
         $files = Storage::ls($path);
         return $this->response->setJSON(['files' => $files]);
     }
+
+    public function serve($path) {
+        $filePath = Storage::getStoragePath($path);
+        $this->response->setHeader('Content-Type', mime_content_type($filePath));
+        readfile($filePath);
+    }
 };
