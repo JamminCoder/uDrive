@@ -6,11 +6,9 @@ namespace App;
 use CodeIgniter\Test\FeatureTestTrait;
 use CodeIgniter\HTTP\Files\UploadedFile;
 use CodeIgniter\Test\CIUnitTestCase;
-use CodeIgniter\Test\DatabaseTestTrait;
 
-class FileUploadTest extends CIUnitTestCase {
+class TestUploadController extends CIUnitTestCase {
     use FeatureTestTrait;
-    use DatabaseTestTrait;
 
     private function mockUpload($referrer=null) {
         // Create a temporary file to simulate the uploaded file
