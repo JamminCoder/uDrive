@@ -9,6 +9,6 @@ class UploadController extends BaseController {
         $files = $this->request->getFiles('files');
         foreach ($files as $file) $file->move(WRITEPATH . 'storage');
 
-        return redirect()->to('/');
+        return redirect()->to($_SERVER['HTTP_REFERER']);
     }
 }

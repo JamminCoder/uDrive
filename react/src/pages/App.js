@@ -2,17 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import axios from 'axios';
 import { RenderFiles } from '../components/Files';
+import { getStoragePath } from '../utils';
 
-
-/**
- * Gets the path relative to `/storage` that will be used to scan the storage directory.
- * @returns { string }
- */
-function getStoragePath() {
-    const paths = window.location.toString().split('storage/');
-    if (paths.length > 1) return '/' + paths[1];
-    return '/';
-}
 
 export default function App() {
     const [files, setFiles] = useState();
