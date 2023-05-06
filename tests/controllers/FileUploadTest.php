@@ -1,49 +1,49 @@
-<?php declare(strict_types=1);
+<?php 
+// declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
+namespace App;
 
+use CodeIgniter\Test\FeatureTestTrait;
+use CodeIgniter\HTTP\Files\UploadedFile;
+use CodeIgniter\Test\CIUnitTestCase;
+use CodeIgniter\Test\DatabaseTestTrait;
 
-/**
- * @param string | null $referer
- * Optional referer header to send with the request
- * @return int
- * HTTP Status code of the response
- */
-function uploadFile($referer=null): int {
-    // TODO: Replace with codeigniter feature test
+class FileUploadTest extends CIUnitTestCase {
+    use FeatureTestTrait;
+    use DatabaseTestTrait;
 
-    // Temp file
-    $tempFilePath = tempnam(sys_get_temp_dir(), 'upload_test');
-    file_put_contents($tempFilePath, 'test data');
-    
-    $uploadUrl = 'http://localhost:8080/api/upload';
+    private function mockUpload($referrer=null) {
+        // Create a temporary file to simulate the uploaded file
+        $tempFilePath = tempnam(sys_get_temp_dir(), 'upload_test');
+        file_put_contents($tempFilePath, 'test data');
+        
+        // Create an UploadedFile instance
+        $uploadedFile = new UploadedFile(
+            $tempFilePath,
+            'test.txt',
+            'text/plain',
+            filesize($tempFilePath),
+            UPLOAD_ERR_OK,
+            true
+        );
 
-    $cURLConnection = curl_init($uploadUrl);
-    curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($cURLConnection, CURLOPT_POST, true);
-    curl_setopt($cURLConnection, CURLOPT_POSTFIELDS, [
-        'files' => new CurlFile($tempFilePath)
-    ]);
+        // set referer
+        $headers = [
+            'Referrer' => $referrer
+        ];
 
-    if ($referer) curl_setopt($cURLConnection, CURLOPT_REFERER, $referer);
-    
-    curl_exec($cURLConnection);
-    curl_close($cURLConnection);
+        $result = $this->withHeaders($headers)->call('POST', '/api/upload', ['files' => $uploadedFile]);
+        return $result;
+    }
 
-    $status = curl_getinfo($cURLConnection, CURLINFO_HTTP_CODE);
-    return $status;
-}
-
-class FileUploadTest extends TestCase {
-    public function testFileUpload() {
-        $status = uploadFile();
-        $this->assertEquals(200, $status);
-        error_log("$status");
+    public function testFileUpload()
+    {
+        $result = $this->mockUpload();
+        $result->assertOK();
     }
 
     public function testFileUploadWithReferer() {
-        $status = uploadFile('http://localhost:8080/');
-        $this->assertEquals(303, $status);
-        error_log("$status");
+        $result = $this->mockUpload('http://localhost:8080/');
+        $result->assertRedirect();
     }
 }

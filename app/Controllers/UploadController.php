@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 use App\Controllers\BaseController;
+use CodeIgniter\HTTP\Message;
+use CodeIgniter\HTTP\UserAgent;
 
 
 class UploadController extends BaseController {
@@ -15,9 +17,12 @@ class UploadController extends BaseController {
         // TODO: Ensure files are not overwritten.
         foreach ($files as $file) $file->move(WRITEPATH . 'storage');
 
-        // If it came from a page, redirect.
-        if (isset($_SERVER['HTTP_REFERER']))
-            return redirect()->to($_SERVER['HTTP_REFERER']);
+        // If it came from a page, redirect back to page.
+        if ($referer = $this->request->header('Referrer')){
+            $this->response->setStatusCode(301);
+            $this->response->setHeader('Location', $referer->getValue());
+            return $this->response;
+        }
 
         // If it's a JSON request, return a JSON response.
         else return $this->response->setJSON(["status" => "success"]);
