@@ -11,6 +11,7 @@ class FileServer extends BaseController {
     }
 
     public function serve($path) {
+        $path = join('/', func_get_args());
         $filePath = Storage::getStoragePath($path);
         $this->response->setHeader('Content-Type', mime_content_type($filePath));
         readfile($filePath);

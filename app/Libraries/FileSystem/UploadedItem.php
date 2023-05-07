@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Libraries\FileSystem;
+use App\Libraries\Storage;
 
 
-class FileSystemItem {
+class UploadedItem {
     public const DIR = 'DIR';
     public const FILE = 'FILE';
 
@@ -13,8 +14,13 @@ class FileSystemItem {
     public bool $isDir = false;
 
     public function __construct($path) {
+        if (!str_starts_with($path, Storage::$root)) {
+            throw new \Exception("Path must be inside storage root");
+        }
+
         $this->path = $path;
-        $this->storagePath = explode('/storage/', $path)[1];
+        $this->storagePath = $this->getRelativeStoragePath();
+
         if (is_dir($path)) {
             $this->type = self::DIR;
             $this->isDir = true;
@@ -40,5 +46,17 @@ class FileSystemItem {
             "path" => $this->path,
             "type" => $this->type
         ];
+    }
+
+    public function getRelativeStoragePath() {
+        $pathPieces = explode('/storage/', $this->path);
+        if (!count($pathPieces) > 1) return $pathPieces[0];
+
+        $result = '';
+        $storagePaths = array_slice($pathPieces, 1);
+        foreach ($storagePaths as $path) {
+            $result .= $path . '/';
+        }
+        return rtrim($result, '/');
     }
 }

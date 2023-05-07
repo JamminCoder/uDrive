@@ -2,9 +2,9 @@
 
 namespace App\Libraries\FileSystem;
 
-use App\Libraries\FileSystem\FileSystemItem;
+use App\Libraries\FileSystem\UploadedItem;
 
-class DirItem extends FileSystemItem {
+class DirItem extends UploadedItem {
     public int $size;
     public int $fileCount;
     

@@ -25,12 +25,15 @@ class TestUploadController extends CIUnitTestCase {
             true
         );
 
+        unlink($tempFilePath);
+
         // set referer
         $headers = [
             'Referrer' => $referrer
         ];
 
-        $result = $this->withHeaders($headers)->call('POST', '/api/upload', ['files' => $uploadedFile]);
+        $result = $this->withHeaders($headers)
+            ->call('POST', '/api/upload', ['files' => $uploadedFile]);
         return $result;
     }
 

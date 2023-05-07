@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\Message;
-use CodeIgniter\HTTP\UserAgent;
 
 
 class UploadController extends BaseController {

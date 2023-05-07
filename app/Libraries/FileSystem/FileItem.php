@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Libraries\FileSystem;
-use App\Libraries\FileSystem\FileSystemItem;
+use App\Libraries\FileSystem\UploadedItem;
 
-class FileItem extends FileSystemItem {
+class FileItem extends UploadedItem {
     public string $mime;
     public int $size;
     public string $extension;
