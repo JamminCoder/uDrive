@@ -17,30 +17,25 @@ class FileController extends BaseController {
         // TODO: Ensure files are not overwritten.
         foreach ($files as $file) $file->move(WRITEPATH . 'storage');
 
-        // If it came from a page, redirect back to page.
-        if ($referer = $this->request->header('Referrer')){
-            $this->response->setStatusCode(301);
-            $this->response->setHeader('Location', $referer->getValue());
-            return $this->response;
-        }
-
         // If it's a JSON request, return a JSON response.
-        else return $this->response->setJSON(["status" => "success"]);
+        return $this->response->setJSON(["status" => "success"]);
     }
-    
+
     public function delete() {
         $path = join('/', func_get_args());
         $absPath = Storage::getStoragePath($path);
         $fs = new Filesystem();
 
-        if (!$fs->exists($absPath))
+        if (!$fs->exists($absPath)) {
+            $this->response->setStatusCode(404);
             return $this->response->setJSON(['message' => "$path does not exist"]);
+        }
 
         try {
             $fs->remove($absPath);
         } catch(IOException $e) {
             $this->response->setStatusCode(500);
-            return $this->response->setJSON(['error' => $e->getMessage()]);
+            return $this->response->setJSON(['message' => $e->getMessage()]);
         }
 
         return $this->response->setJSON(['message' => "Deleted $path"]);

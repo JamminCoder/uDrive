@@ -7,10 +7,10 @@ use CodeIgniter\Test\FeatureTestTrait;
 use CodeIgniter\HTTP\Files\UploadedFile;
 use CodeIgniter\Test\CIUnitTestCase;
 
-class TestUploadController extends CIUnitTestCase {
+class FileControllerTest extends CIUnitTestCase {
     use FeatureTestTrait;
 
-    private function mockUpload($referrer=null) {
+    private function mockUpload() {
         // Create a temporary file to simulate the uploaded file
         $tempFilePath = tempnam(sys_get_temp_dir(), 'upload_test');
         file_put_contents($tempFilePath, 'test data');
@@ -26,14 +26,7 @@ class TestUploadController extends CIUnitTestCase {
         );
 
         unlink($tempFilePath);
-
-        // set referer
-        $headers = [
-            'Referrer' => $referrer
-        ];
-
-        $result = $this->withHeaders($headers)
-            ->call('POST', '/api/upload', ['files' => $uploadedFile]);
+        $result = $this->call('POST', '/api/upload', ['files' => $uploadedFile]);
         return $result;
     }
 
@@ -41,10 +34,5 @@ class TestUploadController extends CIUnitTestCase {
     {
         $result = $this->mockUpload();
         $result->assertOK();
-    }
-
-    public function testFileUploadWithReferer() {
-        $result = $this->mockUpload('http://localhost:8080/');
-        $result->assertRedirect();
     }
 }
