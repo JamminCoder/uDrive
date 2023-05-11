@@ -2,6 +2,7 @@
 
 namespace App\Libraries\FileSystem;
 use App\Libraries\Storage;
+use Symfony\Component\Filesystem\Path;
 
 
 class UploadedItem {
@@ -14,6 +15,7 @@ class UploadedItem {
     public bool $isDir = false;
 
     public function __construct($path) {
+        $path = Path::canonicalize($path);
         if (!str_starts_with($path, Storage::$root)) {
             throw new \Exception("Path must be inside storage root");
         }
