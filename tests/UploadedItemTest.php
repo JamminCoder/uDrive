@@ -15,6 +15,7 @@ class UploadedItemTest extends TestCase {
     {
         parent::__construct();
         $this->filePath = Storage::$root . '/test.txt';
+        file_put_contents($this->filePath, 'Hello World!');
     }
 
     public function testUploadedItem() {

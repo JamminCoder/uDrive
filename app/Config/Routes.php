@@ -34,10 +34,11 @@ $routes->set404Override(function () {
 // route since we don't have to scan directories.
 
 $routes->group('api', static function ($routes) {
-    $routes->post('upload/', 'UploadController::upload');
+    $routes->post('upload/', 'FileController::upload');
+    $routes->get('delete/(.+)', 'FileController::delete/$1');
+
     $routes->get('storage/', 'FileServer::index');
     $routes->get('storage/(.+)', 'FileServer::index/$1');
-    $routes->get('file/storage/(.+)', 'FileServer::serve/$1');
 });
 
 /*

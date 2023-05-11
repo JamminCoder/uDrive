@@ -28,7 +28,7 @@ class Storage {
         return $results;
     }
 
-    public static function getStoragePath($relativePath) {
+    public static function getStoragePath(string $relativePath) {
         $storagePath = rtrim(self::$root . "/$relativePath", '/');
         return $storagePath;
     }

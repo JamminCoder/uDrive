@@ -2,9 +2,11 @@
 
 namespace App\Controllers;
 use App\Controllers\BaseController;
+use App\Libraries\Storage;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 
-
-class UploadController extends BaseController {
+class FileController extends BaseController {
     /**
      * Uploads files from the `files` field in the request  
      * to the `WRITEPATH . 'storage'` directory.
@@ -24,5 +26,23 @@ class UploadController extends BaseController {
 
         // If it's a JSON request, return a JSON response.
         else return $this->response->setJSON(["status" => "success"]);
+    }
+    
+    public function delete() {
+        $path = join('/', func_get_args());
+        $absPath = Storage::getStoragePath($path);
+        $fs = new Filesystem();
+
+        if (!$fs->exists($absPath))
+            return $this->response->setJSON(['message' => "$path does not exist"]);
+
+        try {
+            $fs->remove($absPath);
+        } catch(IOException $e) {
+            $this->response->setStatusCode(500);
+            return $this->response->setJSON(['error' => $e->getMessage()]);
+        }
+
+        return $this->response->setJSON(['message' => "Deleted $path"]);
     }
 }
