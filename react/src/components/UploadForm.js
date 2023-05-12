@@ -7,7 +7,7 @@ export default function UploadForm(props) {
         e.preventDefault();
         const uploadForm = document.querySelector('#uploadForm');
         axios.post('/api/upload', new FormData(uploadForm))
-        .then(console.log)
+        .then(_ => window.location.reload())
         .catch(console.error);
     }
 
