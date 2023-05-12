@@ -3,6 +3,7 @@
 
 namespace App;
 
+use App\Controllers\FileController;
 use CodeIgniter\Test\FeatureTestTrait;
 use CodeIgniter\HTTP\Files\UploadedFile;
 use CodeIgniter\Test\CIUnitTestCase;
@@ -34,5 +35,13 @@ class FileControllerTest extends CIUnitTestCase {
     {
         $result = $this->mockUpload();
         $result->assertOK();
+    }
+
+
+    public function testFileDeletion() {
+        $controller = new FileController();
+        $response = $controller->delete('/test.txt');
+
+        error_log("STATUS" . $response);
     }
 }

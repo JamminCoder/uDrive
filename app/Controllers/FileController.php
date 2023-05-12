@@ -33,11 +33,10 @@ class FileController extends BaseController {
 
         try {
             $fs->remove($absPath);
+            return $this->response->setJSON(['message' => "Deleted $path"]);
         } catch(IOException $e) {
             $this->response->setStatusCode(500);
             return $this->response->setJSON(['message' => $e->getMessage()]);
         }
-
-        return $this->response->setJSON(['message' => "Deleted $path"]);
     }
 }
