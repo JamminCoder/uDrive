@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Libraries\FileSystem;
-
 use App\Libraries\FileSystem\UploadedItem;
 
 class DirItem extends UploadedItem {

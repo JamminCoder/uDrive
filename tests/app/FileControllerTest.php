@@ -5,7 +5,6 @@ namespace App;
 
 use App\Controllers\FileController;
 use App\Libraries\Storage;
-use CodeIgniter\Test\FeatureTestTrait;
 use CodeIgniter\HTTP\Files\UploadedFile;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\ControllerTestTrait;
@@ -30,7 +29,7 @@ class FileControllerTest extends CIUnitTestCase {
 
         $result = $this->withUri('http://localhost:8080')
             ->withBody(['files' => $uploadedFile])
-            ->controller(\App\Controllers\FileController::class)
+            ->controller(FileController::class)
             ->execute('upload');
         
 
@@ -46,14 +45,15 @@ class FileControllerTest extends CIUnitTestCase {
 
 
     public function testFileDeletion() {
-        file_put_contents(Storage::$root . '/test.txt', 'Hello world!');
+        $testPath = Storage::$root . '/test.txt';
+        file_put_contents($testPath, 'Hello world!');
 
         $result = $this->withUri('http://localhost:8080')
-            ->controller(\App\Controllers\FileController::class)
+            ->controller(FileController::class)
             ->execute('delete', 'test.txt');
 
 
         $result->assertOK();
-        $this->assertFileDoesNotExist(Storage::$root . '/test.txt');
+        $this->assertFileDoesNotExist($testPath);
     }
 }
