@@ -14,7 +14,7 @@ class UploadedItemTest extends TestCase {
     public function __construct()
     {
         parent::__construct();
-        $this->filePath = Storage::$root . '/test.txt';
+        $this->filePath = Storage::$root . '/test_item.txt';
         file_put_contents($this->filePath, 'Hello World!');
     }
 
@@ -37,5 +37,13 @@ class UploadedItemTest extends TestCase {
         $this->assertEquals($item->type, UploadedItem::DIR);
         $this->assertEquals($item->isDir, true);
         $this->assertEquals($item->path, Storage::$root);
+    }
+
+
+    /**
+     * Not an actual test, just delete test file when done.
+     */
+    public function testRiskyCleanUp() {
+        $this->assertTrue(unlink($this->filePath));
     }
 }

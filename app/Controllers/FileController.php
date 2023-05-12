@@ -26,10 +26,16 @@ class FileController extends BaseController {
         $absPath = Storage::getStoragePath($path);
         $fs = new Filesystem();
 
+        if ($absPath === Storage::$root) {
+            $this->response->setStatusCode(403);
+            return $this->response->setJSON(['message' => "Cannot delete root directory"]);
+        }
+
         if (!$fs->exists($absPath)) {
             $this->response->setStatusCode(404);
             return $this->response->setJSON(['message' => "$path does not exist"]);
         }
+
 
         try {
             $fs->remove($absPath);
