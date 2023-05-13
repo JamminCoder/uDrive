@@ -43,7 +43,7 @@ class UploadedItemTest extends TestCase {
     /**
      * Not an actual test, just delete test file when done.
      */
-    public function testRiskyCleanUp() {
+    public function testCleanUp() {
         $this->assertTrue(unlink($this->filePath));
     }
 }
