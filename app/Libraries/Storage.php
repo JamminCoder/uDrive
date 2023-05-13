@@ -4,6 +4,7 @@ namespace App\Libraries;
 
 use App\Libraries\FileSystem\DirItem;
 use App\Libraries\FileSystem\FileItem;
+use Symfony\Component\Filesystem\Path;
 
 class Storage {
     static $root = WRITEPATH . "storage";
@@ -29,7 +30,10 @@ class Storage {
     }
 
     public static function getStoragePath(string $relativePath) {
-        $storagePath = rtrim(self::$root . "/$relativePath", '/');
-        return $storagePath;
+        $storagePath = Path::canonicalize(rtrim(self::$root . "/$relativePath", '/'));
+
+        // Don't allow users to access files outside of the storage directory
+        if (str_starts_with($storagePath, self::$root)) return $storagePath;
+        return self::$root;
     }
 }

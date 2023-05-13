@@ -13,7 +13,14 @@ export default function UploadForm(props) {
 
     return (
     <form id='uploadForm' action='/api/upload' method='POST' encType="multipart/form-data">
-        <input onChange={ uploadFile } className='file:cursor-pointer file:rounded file:border file:bg-slate-50 hover:file:bg-slate-100 file:py-2 file:px-2 text-transparent' type="file" name="file" id="file"/>
+        <input 
+            className='file:cursor-pointer file:rounded file:border file:bg-slate-50 hover:file:bg-slate-100 file:py-2 file:px-2 text-transparent' 
+            type="file" 
+            name="files[]" 
+            id="file" multiple
+            onChange={ uploadFile } 
+        />
+            
     </form>
     );
 }

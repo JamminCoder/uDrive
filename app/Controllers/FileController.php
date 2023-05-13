@@ -8,16 +8,22 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class FileController extends BaseController {
     /**
-     * Uploads files from the `files` field in the request  
-     * to the `WRITEPATH . 'storage'` directory.
+     * Uploads files from the `files[]` field in the request  
+     * to the storage directory.
      */
     public function upload() {
-        $files = $this->request->getFiles('files');
+        $requestFiles = $this->request->getFiles();
+
+        // Did the user upload 1 or multiple files?
+        $files = isset($requestFiles['files']) 
+        ? $requestFiles['files'] 
+        : $requestFiles;
 
         // TODO: Ensure files are not overwritten.
-        foreach ($files as $file) $file->move(WRITEPATH . 'storage');
+        foreach ($files as $file) {
+            $file->move(WRITEPATH . 'storage');
+        }
 
-        // If it's a JSON request, return a JSON response.
         return $this->response->setJSON(["status" => "success"]);
     }
 
