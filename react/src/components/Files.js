@@ -32,7 +32,7 @@ export function File({ path }) {
 
     return (
         <div className='bg-blue-50 p-2 rounded border flex justify-between text-sm w-96'>
-            <a href={ 'api/file/storage/' + path }>
+            <a href={ 'api/storage/' + path }>
                 { truncatedPath }
             </a>
 
