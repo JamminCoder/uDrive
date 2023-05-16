@@ -10,7 +10,7 @@ export function useContextMenu(menuItems) {
         
         
         window.addEventListener('mousedown', e => {
-            // Don't close the context menu if it's already open 
+            // Don't close the context menu if the user clicks inside
             if (!e.target.parent.classList.contains('context-menu__item'))
                 setContextMenu(null);
         });
@@ -19,19 +19,21 @@ export function useContextMenu(menuItems) {
     return [contextMenu, handleContextMenu];
 }
 
+export function ContextMenuItem(props) {
+    return (
+        <li key={ i } className='context-menu__item'>
+            { props.children }
+        </li>
+    )
+}
+
 export default function ContextMenu({ x, y, items }) {
     return (
         <div 
         style={{ top: y, left: x }}
         className='context-menu'>
             <ul>
-            { items.map((item, i) => {
-                return (
-                    <li key={ i } className='context-menu__item'>
-                        { item }
-                    </li>
-                )
-            }) }
+            { items.map((item, i) => <ContextMenuItem key={i} >{ item }</ContextMenuItem> )}
             </ul>
         </div>
     );
