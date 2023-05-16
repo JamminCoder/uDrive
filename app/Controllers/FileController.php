@@ -13,8 +13,11 @@ class FileController extends BaseController {
      */
     public function upload() {
         $path = join('/', func_get_args());
-        error_log("PATH: '$path'");
-
+        $writePath = WRITEPATH . 'storage/' . $path;
+        if (!is_dir($writePath)) {
+            return $this->response->setStatusCode(500, 'Path does not exist.');
+        }
+        
         $requestFiles = $this->request->getFiles();
 
         // Did the user upload 1 or multiple files?
@@ -24,7 +27,7 @@ class FileController extends BaseController {
 
         // TODO: Ensure files are not overwritten.
         foreach ($files as $file) {
-            $file->move(WRITEPATH . 'storage/' . $path);
+            $file->move();
         }
 
         return $this->response->setJSON(["status" => "success"]);

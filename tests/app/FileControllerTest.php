@@ -12,7 +12,7 @@ use CodeIgniter\Test\ControllerTestTrait;
 class FileControllerTest extends CIUnitTestCase {
     use ControllerTestTrait;
 
-    private function mockUpload() {
+    private function mockUpload($path='/') {
         // Create a temporary file to simulate the uploaded file
         $tempFilePath = tempnam(sys_get_temp_dir(), 'upload_test');
         file_put_contents($tempFilePath, 'test data');
@@ -30,7 +30,7 @@ class FileControllerTest extends CIUnitTestCase {
         $result = $this->withUri('http://localhost:8080')
             ->withBody(['files' => $uploadedFile])
             ->controller(FileController::class)
-            ->execute('upload');
+            ->execute('upload', $path);
         
 
         unlink($tempFilePath);
@@ -41,6 +41,19 @@ class FileControllerTest extends CIUnitTestCase {
     {
         $result = $this->mockUpload();
         $result->assertOK();
+    }
+
+    public function testFileUploadToDirectory() {
+        $dirPath = Storage::$root . '/upload-test';
+        if (!is_dir($dirPath)) mkdir($dirPath);
+
+        $result = $this->mockUpload('/upload-test');
+        $result->assertOK();
+        
+        $result = $this->mockUpload('/non-existent');
+        $result->assertStatus(500);
+
+        rmdir($dirPath);
     }
 
 
