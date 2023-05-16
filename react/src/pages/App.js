@@ -20,7 +20,8 @@ export default function App() {
     return (
         <div 
             onContextMenu={e => {
-                e.preventDefault();
+                if (e.target.classList.contains('hasContextMenu')) 
+                    e.preventDefault();
             }}
             className='flex'>
             <Sidebar/>

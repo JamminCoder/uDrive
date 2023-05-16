@@ -22,8 +22,13 @@ export function File({ path }) {
     const [visible, setVisible] = useState(true);
     const deleteUrl = `/api/delete/${ path }`;
     const fileUrl = `/api/storage/${ path }`;
+    
     const [contextMenu, handleContextMenu] = useContextMenu([
         <a href={ fileUrl } >Download</a>,
+        <a href={ fileUrl } onClick={e => {
+            e.stopPropagation();
+            console.log(e.target);
+        }}>TEST</a>,
         <a onClick={ sendDelete } href={ deleteUrl } >Delete</a>
     ]);
 
@@ -33,6 +38,7 @@ export function File({ path }) {
 
     function sendDelete(e) {
         e.preventDefault();
+        e.stopPropagation();
         axios.post(deleteUrl).then(() => setVisible(false));
     }
 
@@ -41,8 +47,8 @@ export function File({ path }) {
     return (
         <div
             onContextMenu={ handleContextMenu }
-            className='bg-blue-50 p-2 rounded border flex justify-between text-sm w-96'>
-            <a href={ fileUrl } onContextMenu={() => {}}>
+            className='hasContextMenu bg-blue-50 p-2 rounded border flex justify-between text-sm w-96'>
+            <a href={ fileUrl } >
                 { truncatedPath }
             </a>
 
