@@ -11,7 +11,9 @@ export function useContextMenu(menuItems) {
         
         window.addEventListener('mousedown', e => {
             // Don't close the context menu if the user clicks inside
-            if (!e.target.parent.classList.contains('context-menu__item'))
+            const parent = e.target.parentElement;
+
+            if (!parent || !parent.classList.contains('context-menu__item'))
                 setContextMenu(null);
         });
     }
@@ -21,7 +23,7 @@ export function useContextMenu(menuItems) {
 
 export function ContextMenuItem(props) {
     return (
-        <li key={ i } className='context-menu__item'>
+        <li className='context-menu__item'>
             { props.children }
         </li>
     )

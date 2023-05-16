@@ -25,11 +25,7 @@ export function File({ path }) {
     
     const [contextMenu, handleContextMenu] = useContextMenu([
         <a href={ fileUrl } >Download</a>,
-        <a href={ fileUrl } onClick={e => {
-            e.stopPropagation();
-            console.log(e.target);
-        }}>TEST</a>,
-        <a onClick={ sendDelete } href={ deleteUrl } >Delete</a>
+        <a onClick={ sendDelete } href={ deleteUrl } className='text-red-500 font-medium'>Delete</a>
     ]);
 
     let truncatedPath = path.length > 30 
@@ -51,8 +47,6 @@ export function File({ path }) {
             <a href={ fileUrl } >
                 { truncatedPath }
             </a>
-
-            <a onClick={ sendDelete } href={ deleteUrl }  className='underline text-red-600'>Delete</a>
 
             { contextMenu }
         </div>
