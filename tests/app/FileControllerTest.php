@@ -44,10 +44,11 @@ class FileControllerTest extends CIUnitTestCase {
     }
 
     public function testFileUploadToDirectory() {
-        $dirPath = Storage::$root . '/upload-test';
+        $uploadTestDir = '/upload-test';
+        $dirPath = Storage::$root . $uploadTestDir;
         if (!is_dir($dirPath)) mkdir($dirPath);
 
-        $result = $this->mockUpload('/upload-test');
+        $result = $this->mockUpload($uploadTestDir);
         $result->assertOK();
         
         $result = $this->mockUpload('/non-existent');
