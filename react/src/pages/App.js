@@ -18,7 +18,12 @@ export default function App() {
     }, []);
 
     return (
-        <div className='flex'>
+        <div 
+            onContextMenu={e => {
+                if (e.target.classList.contains('hasContextMenu')) 
+                    e.preventDefault();
+            }}
+            className='flex'>
             <Sidebar/>
             <main className='p-8'>
                 <h1 className='text-2xl font-medium mb-8'>{ storagePath }</h1>

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useContextMenu } from './ContextMenu';
 
 export function RenderFiles({ files }) {
     return files ? files.map((entry, i) => 
@@ -20,23 +21,34 @@ export function Dir({ path }) {
 export function File({ path }) {
     const [visible, setVisible] = useState(true);
     const deleteUrl = `/api/delete/${ path }`;
-    const truncatedPath = path.substring(0, 30) + '...';
+    const fileUrl = `/api/storage/${ path }`;
+    
+    const [contextMenu, handleContextMenu] = useContextMenu([
+        <a href={ fileUrl } >Download</a>,
+        <a onClick={ sendDelete } href={ deleteUrl } className='text-red-500 font-medium'>Delete</a>
+    ]);
+
+    let truncatedPath = path.length > 30 
+    ? path.substring(0, 30) + '...'
+    : path;
 
     function sendDelete(e) {
         e.preventDefault();
-        axios.post(deleteUrl);
-        setVisible(false);
+        e.stopPropagation();
+        axios.post(deleteUrl).then(() => setVisible(false));
     }
 
     if (!visible) return;
 
     return (
-        <div className='bg-blue-50 p-2 rounded border flex justify-between text-sm w-96'>
-            <a href={ 'api/storage/' + path }>
+        <div
+            onContextMenu={ handleContextMenu }
+            className='hasContextMenu bg-blue-50 p-2 rounded border flex justify-between text-sm w-96'>
+            <a href={ fileUrl } >
                 { truncatedPath }
             </a>
 
-            <a onClick={ sendDelete } href={ deleteUrl }  className='underline text-red-600'>Delete</a>
+            { contextMenu }
         </div>
     );
 }
