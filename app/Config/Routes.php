@@ -34,7 +34,7 @@ $routes->set404Override(function () {
 // route since we don't have to scan directories.
 
 $routes->group('api', static function ($routes) {
-    $routes->post('delete/(:any)', 'FileController::delete/$1');
+    $routes->delete('delete/(:any)', 'FileController::delete/$1');
     $routes->get('delete/(:any)', 'FileController::delete/$1');
     $routes->post('upload/', 'FileController::upload');
 

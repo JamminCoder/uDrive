@@ -35,7 +35,7 @@ export function File({ path }) {
     function sendDelete(e) {
         e.preventDefault();
         e.stopPropagation();
-        axios.post(deleteUrl).then(() => setVisible(false));
+        axios.delete(deleteUrl).then(() => setVisible(false));
     }
 
     if (!visible) return;
