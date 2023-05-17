@@ -13,8 +13,8 @@ class FileController extends BaseController {
      */
     public function upload() {
         $path = join('/', func_get_args());
-        $writePath = WRITEPATH . 'storage/' . $path;
-        if (!is_dir($writePath)) {
+        $absPath = Storage::getStoragePath($path);
+        if (!is_dir($absPath)) {
             return $this->response->setStatusCode(500, 'Path does not exist.');
         }
         
