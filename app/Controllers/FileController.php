@@ -28,7 +28,7 @@ class FileController extends BaseController {
 
         // TODO: Ensure files are not overwritten.
         foreach ($files as $file) {
-            $file->move();
+            $file->move($absPath);
         }
 
         return $this->response->setJSON(["status" => "success"]);
