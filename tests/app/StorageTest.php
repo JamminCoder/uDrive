@@ -3,21 +3,20 @@
 use App\Libraries\FileSystem\UploadedItem;
 use CodeIgniter\Test\CIUnitTestCase;
 use App\Libraries\Storage;
+use Symfony\Component\Filesystem\Filesystem;
 
 class StorageTest extends CIUnitTestCase {
     public function testList() {
         $testDirName = '/test-dir';
         $hasDir = false;
         $hasFile = false;
-
+        $fs = new Filesystem();
         $baseDirPath = Storage::$root . $testDirName;
-        if (!is_dir($baseDirPath)) mkdir($baseDirPath); 
-
         $filePath = "$baseDirPath/test.txt";
         $dirPath = "$baseDirPath/dir";
 
-        file_put_contents($filePath, 'test');
-        if (!is_dir($dirPath)) mkdir($dirPath);
+        $fs->mkdir($dirPath);
+        $fs->touch($filePath);
 
         $items = Storage::ls($testDirName);
         $this->assertCount(2, $items);
@@ -30,9 +29,7 @@ class StorageTest extends CIUnitTestCase {
         $this->assertTrue($hasDir);
         $this->assertTrue($hasFile);
 
-        rmdir($dirPath);
-        unlink($filePath);
-        rmdir($baseDirPath);
+        $fs->remove($baseDirPath);
     }
     
     public function testCannotAccessOutsideStorageDirectory() {
