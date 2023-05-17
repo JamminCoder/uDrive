@@ -1,5 +1,4 @@
 <?php 
-// declare(strict_types=1);
 
 namespace App;
 
@@ -68,7 +67,7 @@ class FileControllerTest extends CIUnitTestCase {
         $testPath = Storage::$root . '/test.txt';
         file_put_contents($testPath, 'Hello world!');
 
-        $result = $this->withUri('http://localhost:8080')
+        $result = $this->withUri('http://localhost:8080/api/delete')
             ->controller(FileController::class)
             ->execute('delete', 'test.txt');
 
