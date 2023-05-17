@@ -29,10 +29,10 @@ class Storage {
         return $results;
     }
 
-    public static function getStoragePath(string $relativePath) {
+    public static function getStoragePath(string $relativePath='') {
         $storagePath = rtrim(self::$root . "/$relativePath", '/');
         $storagePath = Path::canonicalize($storagePath);
-        
+
         // Don't allow users to access files outside of the storage root.
         if (str_starts_with($storagePath, self::$root)) return $storagePath;
         
