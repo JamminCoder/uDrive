@@ -21,4 +21,19 @@ class DirControllerTest extends CIUnitTestCase {
 
         rmdir($path);
     }
+    
+    public function testMultiLevelDirectoryCreation() {
+        $basePath = Storage::getStoragePath('test');
+        $path = $basePath . '/test2';
+
+        $result = $this->withUri('http://localhost:8080/api/dir/create')
+            ->controller(DirController::class)
+            ->execute('create', 'test/test2');
+        
+        $result->assertOK();
+        $this->assertDirectoryExists($path);
+
+        rmdir($path);
+        rmdir($basePath);
+    }
 }
