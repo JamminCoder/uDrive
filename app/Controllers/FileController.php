@@ -33,6 +33,22 @@ class FileController extends BaseController {
         return $this->response->setJSON(["status" => "success"]);
     }
 
+    public function create() {
+        $path = join('/', func_get_args());
+        $absPath = Storage::getStoragePath($path);
+
+        $fs = new Filesystem();
+
+        if ($fs->exists($absPath)) 
+            return $this->response
+                ->setJSON(['message' => 'File already exists'])
+                ->setStatusCode(500, 'File already exists');
+        
+        $fs->touch($absPath);
+
+        return $this->response->setJSON(['message' => 'File successfully created']);
+    }
+
     public function delete() {
         $path = join('/', func_get_args());
         $absPath = Storage::getStoragePath($path);

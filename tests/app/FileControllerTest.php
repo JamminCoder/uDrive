@@ -57,6 +57,12 @@ class FileControllerTest extends CIUnitTestCase {
         rmdir($dirPath);
     }
 
+    public function testFileCreation() {
+        $result = $this->withUri('http://localhost:8080/api/create')
+            ->controller(FileController::class)
+            ->execute('create', 'test.txt');
+        $result->assertOK();
+    }
 
     public function testFileDeletion() {
         $testPath = Storage::$root . '/test.txt';
