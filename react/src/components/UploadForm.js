@@ -11,7 +11,7 @@ export function UploadButton() {
     function uploadFile(e) {
         e.preventDefault();
         const uploadForm = document.querySelector('#uploadForm');
-        axios.post(uploadPath + '/asdasdasd', new FormData(uploadForm))
+        axios.post(uploadPath, new FormData(uploadForm))
         .then(_ => window.location.reload())
         .catch(err => {
             console.error(err)
