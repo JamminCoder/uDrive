@@ -30,7 +30,8 @@
         }
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "dev": "php spark serve"
     },
     "support": {
         "forum": "https://forum.codeigniter.com/",

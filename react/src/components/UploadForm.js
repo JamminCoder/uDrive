@@ -13,16 +13,24 @@ export default function UploadForm(props) {
         .catch(console.error);
     }
 
+    function handleUploadClick(e) {
+        e.preventDefault();
+        document.querySelector('#file').click()
+    }
+
     return (
     <form id='uploadForm' action={ uploadPath } method='POST' encType="multipart/form-data">
         <input 
-            className='file:cursor-pointer file:rounded file:border file:bg-slate-50 hover:file:bg-slate-100 file:py-2 file:px-2 text-transparent' 
+            className='hidden' 
             type="file" 
             name="files[]" 
             id="file" multiple
             onChange={ uploadFile } 
         />
-            
+        <button 
+        className='cursor-pointer rounded border bg-slate-50 hover:bg-slate-100 py-2 px-2' 
+        onClick={ handleUploadClick }
+        >Upload Files</button>
     </form>
     );
 }
