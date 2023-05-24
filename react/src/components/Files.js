@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useContextMenu } from './ContextMenu';
+import Error from './Error';
 
 export function RenderFiles({ files }) {
     return files ? files.map((entry, i) => 
@@ -20,6 +21,7 @@ export function Dir({ path }) {
 
 export function File({ path }) {
     const [visible, setVisible] = useState(true);
+    const [error, setError] = useState();
     const deleteUrl = `/api/delete/${ path }`;
     const fileUrl = `/api/storage/${ path }`;
     
@@ -35,7 +37,12 @@ export function File({ path }) {
     function sendDelete(e) {
         e.preventDefault();
         e.stopPropagation();
-        axios.delete(deleteUrl).then(() => setVisible(false));
+        axios.delete(deleteUrl)
+        .then(() => setVisible(false))
+        .catch(err => {
+            console.error(err);
+            setError(err.message);
+        });
     }
 
     if (!visible) return;
@@ -48,6 +55,7 @@ export function File({ path }) {
                 { truncatedPath }
             </a>
 
+            <Error>{ error }</Error>
             { contextMenu }
         </div>
     );
