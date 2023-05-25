@@ -5,8 +5,16 @@ import Error from './Error';
 
 const uploadPath = `/api/upload${ getStoragePath() }`;
 
-export function UploadButton() {
+export function FormButton({ onClick, children }) {
+    return <button 
+    className='cursor-pointer rounded border bg-slate-50 hover:bg-slate-100 py-2 px-2' 
+    onClick={ onClick }
+    >{ children }</button>
+}
+
+export function UploadFileButton() {
     const [error, setError] = useState(null);
+    const id = 'fileUpload';
 
     function uploadFile(e) {
         e.preventDefault();
@@ -21,7 +29,7 @@ export function UploadButton() {
 
     function handleUploadClick(e) {
         e.preventDefault();
-        document.querySelector('#file').click()
+        document.querySelector(`#${ id }`).click();
     }
 
     return (
@@ -30,14 +38,11 @@ export function UploadButton() {
             className='hidden' 
             type="file" 
             name='files[]'
-            id='file' multiple
+            id={ id } multiple
             onChange={ uploadFile } 
         />
-        <button 
-        className='cursor-pointer rounded border bg-slate-50 hover:bg-slate-100 py-2 px-2' 
-        onClick={ handleUploadClick }
-        >Upload Files</button>
-
+        
+        <FormButton onClick={ handleUploadClick }>Upload File</FormButton>
         <Error>{ error }</Error>
     </>
     );
@@ -45,6 +50,7 @@ export function UploadButton() {
 
 export function UploadFolderButton() {
     const [error, setError] = useState(null);
+    const id = 'folderUpload';
 
     function uploadFile(e) {
         e.preventDefault();
@@ -59,7 +65,7 @@ export function UploadFolderButton() {
 
     function handleUploadClick(e) {
         e.preventDefault();
-        document.querySelector(`#folder`).click()
+        document.querySelector(`#${ id }`).click();
     }
 
     return (
@@ -68,16 +74,13 @@ export function UploadFolderButton() {
             className='hidden' 
             type='file'
             name='folder'
-            id='folder'
+            id={ id }
             mozdirectory='true'
             webkitdirectory='true'
             onChange={ uploadFile } 
         />
-        <button 
-        className='cursor-pointer rounded border bg-slate-50 hover:bg-slate-100 py-2 px-2' 
-        onClick={ handleUploadClick }
-        >Folder Upload</button>
 
+        <FormButton onClick={ handleUploadClick }>Upload Folder</FormButton>
         <Error>{ error }</Error>
     </>
     );
@@ -87,7 +90,7 @@ export function UploadFolderButton() {
 export default function UploadForm() {
     return (
     <form id='uploadForm' action={ uploadPath } method='POST' encType="multipart/form-data" className='relative grid gap-4'>
-        <UploadButton/>
+        <UploadFileButton/>
         <UploadFolderButton/>
     </form>
     );
