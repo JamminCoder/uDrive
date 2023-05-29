@@ -3,7 +3,9 @@ import axios from 'axios';
 import { getStoragePath } from '../utils';
 import Error from './Error';
 
-const uploadPath = `/api/upload${ getStoragePath() }`;
+const storagePath = getStoragePath();
+const uploadPath = `/api/upload${ storagePath }`;
+const uploadDirPath = `/api/dir/upload${ storagePath }`
 
 export function FormButton({ onClick, children }) {
     return <button 
@@ -52,15 +54,15 @@ export function UploadFolderButton() {
     const [error, setError] = useState(null);
     const id = 'folderUpload';
 
-    function uploadFile(e) {
+    function uploadFolder(e) {
         e.preventDefault();
         const uploadForm = document.querySelector('#uploadForm');
-        axios.post(uploadPath, new FormData(uploadForm))
+        const folderInput = uploadForm.querySelector(`input#${ id }`);
+        const formData = new FormData(uploadForm);
+
+        axios.post(uploadDirPath, formData)
         .then(_ => window.location.reload())
-        .catch(err => {
-            console.error(err)
-            setError(err.message);
-        });
+        .catch(err => setError(err.message));
     }
 
     function handleUploadClick(e) {
@@ -73,11 +75,13 @@ export function UploadFolderButton() {
         <input 
             className='hidden' 
             type='file'
-            name='folder'
+            name='folder[]'
             id={ id }
+            multiple
+            directory='true'
             mozdirectory='true'
             webkitdirectory='true'
-            onChange={ uploadFile } 
+            onChange={ uploadFolder } 
         />
 
         <FormButton onClick={ handleUploadClick }>Upload Folder</FormButton>

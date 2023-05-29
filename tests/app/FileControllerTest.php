@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Controllers\DirController;
 use App\Controllers\FileController;
 use App\Libraries\Storage;
 use CodeIgniter\HTTP\Files\UploadedFile;
@@ -87,5 +88,11 @@ class FileControllerTest extends CIUnitTestCase {
 
         $result->assertOK();
         $this->assertFileDoesNotExist($testPath);
+    }
+
+    public function testDirectoryUpload() {
+        $result = $this->withUri('http://localhost:8080/api/upload-dir')
+        ->controller(DirController::class)
+        ->execute('upload');
     }
 }
