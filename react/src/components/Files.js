@@ -6,33 +6,35 @@ import Error from './Error';
 export function RenderFiles({ files }) {
     return files ? files.map((entry, i) => 
         entry.isDir 
-        ? <Dir key={ i } path={ entry.storagePath } />
-        : <File key={ i } path={ entry.storagePath }/>
+        ? <Dir key={ i } dir={ entry }/>
+        : <File key={ i } file={ entry }/>
     ): '';
 }
 
-export function Dir({ path }) {
+export function Dir({ dir }) {
+    const itemUrl = '/storage/' + dir.storagePath;
     return (
-        <a className='bg-blue-200 p-2 rounded border block' href={ '/storage/' + path }>
-            { path }
+        <a className='bg-blue-200 p-2 rounded border block' href={ itemUrl }>
+            { dir.name }
         </a>
     );
 }
 
-export function File({ path }) {
+export function File({ file }) {
     const [visible, setVisible] = useState(true);
     const [error, setError] = useState();
-    const deleteUrl = `/api/delete/${ path }`;
-    const fileUrl = `/api/storage/${ path }`;
+    const deleteUrl = `/api/delete/${ file.storagePath }`;
+    const fileUrl = `/api/storage/${ file.storagePath }`;
+    const fileName = file.name;
     
     const [contextMenu, handleContextMenu] = useContextMenu([
         <a href={ fileUrl } >Download</a>,
         <a onClick={ sendDelete } href={ deleteUrl } className='text-red-500 font-medium'>Delete</a>
     ]);
 
-    let truncatedPath = path.length > 30 
-    ? path.substring(0, 30) + '...'
-    : path;
+    let truncatedName = fileName.length > 30 
+    ? fileName.substring(0, 30) + '...'
+    : fileName;
 
     function sendDelete(e) {
         e.preventDefault();
@@ -52,7 +54,7 @@ export function File({ path }) {
             onContextMenu={ handleContextMenu }
             className='hasContextMenu bg-blue-50 p-2 rounded border flex justify-between text-sm w-96'>
             <a href={ fileUrl } >
-                { truncatedPath }
+                { truncatedName }
             </a>
 
             <Error>{ error }</Error>

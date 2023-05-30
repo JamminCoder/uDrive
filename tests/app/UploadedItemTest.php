@@ -9,20 +9,24 @@ use App\Libraries\FileSystem\DirItem;
 use App\Libraries\Storage;
 
 class UploadedItemTest extends TestCase {
+    private string $fileName;
     private string $filePath;
 
     public function __construct()
     {
         parent::__construct();
-        $this->filePath = Storage::$root . '/test_item.txt';
+        $this->fileName = 'test_item.txt';
+        $this->filePath = Storage::$root . DIRECTORY_SEPARATOR . $this->fileName;
         file_put_contents($this->filePath, 'Hello World!');
     }
 
     public function testUploadedItem() {
         $item = new UploadedItem($this->filePath);
         $this->assertEquals($item->path, $this->filePath);
+        $this->assertEquals($item->name, $this->fileName);
         $this->assertEquals($item->type, UploadedItem::FILE);
         $this->assertEquals($item->isDir, false);
+
     }
 
     public function testFileItem() {

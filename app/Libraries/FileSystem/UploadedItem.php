@@ -10,6 +10,7 @@ class UploadedItem {
     public const FILE = 'FILE';
 
     public string $path;
+    public string $name;
     public string $storagePath;
     public string $type;
     public bool $isDir = false;
@@ -21,6 +22,10 @@ class UploadedItem {
         }
 
         $this->path = $path;
+
+        // Extract the name from the path
+        $nameStart = strrpos($path, DIRECTORY_SEPARATOR, -1) + 1;
+        $this->name = substr($path, $nameStart);
         $this->storagePath = $this->getRelativeStoragePath();
 
         if (is_dir($path)) {
