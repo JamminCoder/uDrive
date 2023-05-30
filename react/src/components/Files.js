@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useContextMenu } from './ContextMenu';
 import Error from './Error';
+import { 
+    API_FILE_DELETE, API_FILE_STORAGE,
+    deleteFile,
+ } from '../api/storage';
+import { preventDefaults } from '../utils';
 
 export function RenderFiles({ files }) {
     return files ? files.map((entry, i) => 
@@ -23,23 +27,21 @@ export function Dir({ dir }) {
 export function File({ file }) {
     const [visible, setVisible] = useState(true);
     const [error, setError] = useState();
-    const deleteUrl = `/api/delete/${ file.storagePath }`;
-    const fileUrl = `/api/storage/${ file.storagePath }`;
     const fileName = file.name;
-    
-    const [contextMenu, handleContextMenu] = useContextMenu([
-        <a href={ fileUrl } >Download</a>,
-        <a onClick={ sendDelete } href={ deleteUrl } className='text-red-500 font-medium'>Delete</a>
-    ]);
-
+    const fileUrl = API_FILE_STORAGE(file.storagePath);
     let truncatedName = fileName.length > 30 
     ? fileName.substring(0, 30) + '...'
     : fileName;
 
+    const [contextMenu, handleContextMenu] = useContextMenu([
+        <a href={ fileUrl } >Download</a>,
+        <a onClick={ sendDelete } href={ API_FILE_DELETE(file.storagePath) } className='text-red-500 font-medium'>Delete</a>
+    ]);
+
+
     function sendDelete(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        axios.delete(deleteUrl)
+        preventDefaults(e);
+        deleteFile(file.storagePath)
         .then(() => setVisible(false))
         .catch(err => {
             console.error(err);

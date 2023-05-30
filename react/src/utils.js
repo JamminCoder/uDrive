@@ -7,3 +7,8 @@ export function getStoragePath() {
     if (paths.length > 1) return '/' + paths[1];
     return '/';
 }
+
+export function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
