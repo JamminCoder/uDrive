@@ -17,7 +17,14 @@ class UploadedItemTest extends TestCase {
         parent::__construct();
         $this->fileName = 'test_item.txt';
         $this->filePath = Storage::$root . DIRECTORY_SEPARATOR . $this->fileName;
+    }
+
+    private function createTestFile() {
         file_put_contents($this->filePath, 'Hello World!');
+    }
+
+    private function deleteTestFile() {
+        unlink($this->filePath);
     }
 
     public function testUploadedItem() {
@@ -30,10 +37,12 @@ class UploadedItemTest extends TestCase {
     }
 
     public function testFileItem() {
+        $this->createTestFile();
         $item = new FileItem($this->filePath);
         $this->assertEquals($item->type, UploadedItem::FILE);
         $this->assertEquals($item->isDir, false);
         $this->assertEquals($item->path, $this->filePath);
+        $this->deleteTestFile();
     }
 
     public function testDirItem() {
@@ -41,13 +50,5 @@ class UploadedItemTest extends TestCase {
         $this->assertEquals($item->type, UploadedItem::DIR);
         $this->assertEquals($item->isDir, true);
         $this->assertEquals($item->path, Storage::$root);
-    }
-
-
-    /**
-     * Not an actual test, just delete test file when done.
-     */
-    public function testCleanUp() {
-        $this->assertTrue(unlink($this->filePath));
     }
 }
