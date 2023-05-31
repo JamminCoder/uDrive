@@ -17,6 +17,8 @@ class UploadedItem {
 
     public function __construct($path) {
         $path = Path::canonicalize($path);
+
+        // Don't allow paths from outside the storage root
         if (!str_starts_with($path, Storage::$root)) {
             throw new \Exception("Path must be inside storage root");
         }

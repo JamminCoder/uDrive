@@ -9,6 +9,10 @@ use Symfony\Component\Filesystem\Path;
 class Storage {
     static $root = WRITEPATH . "storage";
     
+    /**
+     * @param string $relativePath
+     * @return FileItem[] | DirItem[]
+     */
     public static function ls(string $relativePath='/') {
         $targetDirPath = self::getStoragePath($relativePath);
         if (!is_dir($targetDirPath)) return;
