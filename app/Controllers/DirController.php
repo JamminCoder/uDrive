@@ -11,7 +11,15 @@ class DirController extends BaseController {
         $absPath = Storage::getStoragePath($path);
         mkdir($absPath, recursive: true);
 
-        return $this->response->setJSON(['message', 'Successfully created ' . $path]);
+        return $this->response->setJSON(['message', "Successfully created $path"]);
+    }
+
+    public function delete(...$pathArray) {
+        $path = join('/', $pathArray);
+        $absPath = Storage::getStoragePath($path);
+        rmdir($absPath);
+
+        return $this->response->setJSON(['message' => "Successfully deleted $path"]);
     }
 
     public function upload(...$pathArray) {

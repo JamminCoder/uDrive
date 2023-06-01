@@ -42,6 +42,7 @@ $routes->group('api', static function ($routes) {
     $routes->post('create/(:any)', 'FileController::create/$1');
 
     $routes->post('dir/create/(:any)', 'DirController::create/$1');
+    $routes->delete('dir/delete/(:any)', 'DirController::delete/$1');
 
     $routes->get('storage/', 'FileServer::index');
     $routes->get('storage/(.+)', 'FileServer::index/$1');

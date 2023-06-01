@@ -21,6 +21,19 @@ class DirControllerTest extends CIUnitTestCase {
 
         rmdir($path);
     }
+
+    public function testDirecoryDeletion() {
+        $path = Storage::getStoragePath('test');
+        mkdir($path);
+        $result = $this->withUri('http://localhost:8080/api/dir/delete/test')
+            ->controller(DirController::class)
+            ->execute('delete', 'test');
+        
+        $result->assertOK();
+        $this->assertDirectoryDoesNotExist($path);
+        
+        if (is_dir($path)) rmdir($path);
+    }
     
     public function testMultiLevelDirectoryCreation() {
         $basePath = Storage::getStoragePath('test');
