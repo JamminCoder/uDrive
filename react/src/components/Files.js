@@ -27,10 +27,7 @@ export function Dir({ dir }) {
     function sendDelete(e) {
         preventDefaults(e);
         deleteDirectory(dir.storagePath)
-        .then(res => {
-            setVisible(false);
-            console.log(res)
-        })
+        .then(_ => setVisible(false))
         .catch(err => {
             console.error(err);
             setError(err.message);

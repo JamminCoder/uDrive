@@ -16,7 +16,6 @@ export async function deleteFile(filePath) {
 
 export async function deleteDirectory(dirPath) {
     try {
-        console.log(API_DIR_DELETE(dirPath));
         const res = await axios.delete(API_DIR_DELETE(dirPath));
         return res;
     } catch (err) { 
