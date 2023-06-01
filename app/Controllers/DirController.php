@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Libraries\Storage;
+use Symfony\Component\Filesystem\Filesystem;
 
 class DirController extends BaseController {
     public function create(...$pathArray) {
@@ -17,7 +18,7 @@ class DirController extends BaseController {
     public function delete(...$pathArray) {
         $path = join('/', $pathArray);
         $absPath = Storage::getStoragePath($path);
-        rmdir($absPath);
+        (new Filesystem())->remove($absPath);
 
         return $this->response->setJSON(['message' => "Successfully deleted $path"]);
     }

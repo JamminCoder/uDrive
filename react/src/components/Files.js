@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useContextMenu } from './ContextMenu';
 import Error from './Error';
 import { 
-    API_FILE_DELETE, API_FILE_STORAGE,
-    deleteFile,
+    API_FILE_DELETE, API_DIR_DELETE, API_FILE_STORAGE,
+    deleteFile, deleteDirectory
  } from '../api/storage';
 import { preventDefaults } from '../utils';
 
@@ -16,11 +16,40 @@ export function RenderFiles({ files }) {
 }
 
 export function Dir({ dir }) {
+    const [visible, setVisible] = useState(true);
+    const [error, setError] = useState();
+    const [contextMenu, handleContextMenu] = useContextMenu([
+        <a onClick={ sendDelete } href={ API_DIR_DELETE(dir.storagePath) } className='text-red-500 font-medium'>Delete</a>
+    ]);
     const itemUrl = '/storage/' + dir.storagePath;
+
+
+    function sendDelete(e) {
+        preventDefaults(e);
+        deleteDirectory(dir.storagePath)
+        .then(res => {
+            setVisible(false);
+            console.log(res)
+        })
+        .catch(err => {
+            console.error(err);
+            setError(err.message);
+        });
+    }
+
+    if (!visible) return;
+
     return (
-        <a className='bg-blue-200 p-2 rounded border block' href={ itemUrl }>
-            { dir.name }
-        </a>
+        <div
+            onContextMenu={ handleContextMenu } 
+            className='hasContextMenu bg-blue-200 p-2 rounded border block'>
+            <a href={ itemUrl }>
+                { dir.name }
+            </a>
+
+            { contextMenu }
+            <Error>{ error }</Error>
+        </div>
     );
 }
 
