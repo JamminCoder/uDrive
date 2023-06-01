@@ -4,8 +4,8 @@ namespace App\Controllers;
 use App\Libraries\Storage;
 
 class FileServer extends BaseController {
-    public function index() {
-        $path = join('/', func_get_args());
+    public function index(...$pathArray) {
+        $path = join('/', $pathArray);
         if (is_dir(Storage::$root . "/$path")) {
             return $this->response->setJSON(['files' => Storage::ls($path)]);
         }
@@ -15,7 +15,6 @@ class FileServer extends BaseController {
     }
 
     private function serve($path) {
-        $path = join('/', func_get_args());
         $filePath = Storage::getStoragePath($path);
         $this->response->setHeader('Content-Type', mime_content_type($filePath));
         readfile($filePath);

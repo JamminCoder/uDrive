@@ -12,8 +12,8 @@ class FileController extends BaseController {
      * Uploads files from the `files[]` field in the request  
      * to the storage directory.
      */
-    public function upload() {
-        $path = join('/', func_get_args());
+    public function upload(...$pathArray) {
+        $path = join('/', $pathArray);
         $absPath = Storage::getStoragePath($path);
         if (!is_dir($absPath)) {
             return $this->response->setStatusCode(500, 'Path does not exist.');
@@ -34,8 +34,8 @@ class FileController extends BaseController {
         return $this->response->setJSON(["status" => "success"]);
     }
 
-    public function create() {
-        $path = join('/', func_get_args());
+    public function create(...$pathArray) {
+        $path = join('/', $pathArray);
         $absPath = Storage::getStoragePath($path);
 
         $fs = new Filesystem();
@@ -50,8 +50,8 @@ class FileController extends BaseController {
         return $this->response->setJSON(['message' => 'File successfully created']);
     }
 
-    public function delete() {
-        $path = join('/', func_get_args());
+    public function delete(...$pathArray) {
+        $path = join('/', $pathArray);
         $absPath = Storage::getStoragePath($path);
         $fs = new Filesystem();
 

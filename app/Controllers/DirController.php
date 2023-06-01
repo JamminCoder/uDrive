@@ -6,16 +6,16 @@ use App\Controllers\BaseController;
 use App\Libraries\Storage;
 
 class DirController extends BaseController {
-    public function create() {
-        $path = join('/', func_get_args());
+    public function create(...$pathArray) {
+        $path = join('/', $pathArray);
         $absPath = Storage::getStoragePath($path);
         mkdir($absPath, recursive: true);
 
         return $this->response->setJSON(['message', 'Successfully created ' . $path]);
     }
 
-    public function upload() {
-        $path = join('/', func_get_args());
+    public function upload(...$pathArray) {
+        $path = join('/', $pathArray);
         $absPath = Storage::getStoragePath($path);
         if (!is_dir($absPath)) 
             return $this->response->setStatusCode(500, 'Path does not exist.');
