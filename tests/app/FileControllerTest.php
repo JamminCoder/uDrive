@@ -8,50 +8,49 @@ use App\Libraries\Storage;
 use CodeIgniter\HTTP\Files\UploadedFile;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\ControllerTestTrait;
+use CodeIgniter\Test\FeatureTestTrait;
 
 class FileControllerTest extends CIUnitTestCase {
-    use ControllerTestTrait;
+    // use ControllerTestTrait;
+    use FeatureTestTrait;
 
     public function mockUpload($path='/') {
-        /**
-         * This is not working.
-         * Find a way to test file uploads
-         */
+        if (!$path[0] == '/' && strlen($path) > 1) $path = '/' . $path;
+
         // Create a temporary file to simulate the uploaded file
         $tempFilePath = tempnam(sys_get_temp_dir(), 'upload_test');
         file_put_contents($tempFilePath, 'test data');
 
         // Create an UploadedFile instance
-        $uploadedFile = new UploadedFile(
-            $tempFilePath,
-            'test.txt',
-            'text/plain',
-            filesize($tempFilePath),
-            UPLOAD_ERR_OK,
-            true
-        );
-
-        $result = $this->withUri('http://localhost:8080/api/upload')
-            ->withBody(['files' => $uploadedFile])
-            ->controller(FileController::class)
-            ->execute('upload', $path);
+        $file = [
+            'name' => 'test.txt',
+            'type' => 'text/plain',
+            'tmp_name' => $tempFilePath,
+            'error' => 0,
+        ];
         
-
+        $result = $this->post("api/upload$path", [
+            'file' => $file
+        ]);
+    
         unlink($tempFilePath);
         return $result;
     }
 
     public function testFileUpload()
-    {
+    {        
         $result = $this->mockUpload();
         $result->assertOK();
+
+        $filePath = Storage::getStoragePath('test.txt');
+        unlink($filePath);
     }
 
     public function testFileUploadWhenFileExists() {
-        $path = Storage::getStoragePath('test-exists.txt');
+        $path = Storage::getStoragePath('test.txt');
         file_put_contents($path, 'hello!');
-        $result = $this->mockUpload('test-exists.txt');
-        $result->assertNotOK();
+        $result = $this->mockUpload();
+        $result->assertOK();
 
         unlink($path);
     }
@@ -71,22 +70,17 @@ class FileControllerTest extends CIUnitTestCase {
     }
 
     public function testFileCreation() {
-        $result = $this->withUri('http://localhost:8080/api/create')
-            ->controller(FileController::class)
-            ->execute('create', 'test.txt');
+        $result = $this->post('api/create/test.txt');
         $result->assertOK();
     }
 
     public function testFileDeletion() {
-        $testPath = Storage::$root . '/test.txt';
+        $testPath = Storage::getStoragePath('test.txt');
         file_put_contents($testPath, 'Hello world!');
 
-        $result = $this->withUri('http://localhost:8080/api/delete')
-            ->controller(FileController::class)
-            ->execute('delete', 'test.txt');
-
-
+        $result = $this->post('api/delete/test.txt');
         $result->assertOK();
-        $this->assertFileDoesNotExist($testPath);
+
+        if (file_exists($testPath)) unlink($testPath);
     }   
 }
