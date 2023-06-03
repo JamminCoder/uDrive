@@ -15,6 +15,7 @@ class FileControllerTest extends CIUnitTestCase {
 
         $ch = curl_init("http://localhost:8080/api/upload/$path");
         curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // Don't print curl output
         curl_setopt($ch, CURLOPT_POSTFIELDS, [
             'files[]' => $curlFile,
         ]);
@@ -79,5 +80,5 @@ class FileControllerTest extends CIUnitTestCase {
 
         $result->assertOK();
         $this->assertFileDoesNotExist($testPath);
-    }   
+    }
 }
