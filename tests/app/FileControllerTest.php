@@ -2,75 +2,70 @@
 
 namespace App;
 
-use App\Controllers\DirController;
 use App\Controllers\FileController;
 use App\Libraries\Storage;
-use CodeIgniter\HTTP\Files\UploadedFile;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\ControllerTestTrait;
-use CodeIgniter\Test\FeatureTestTrait;
 
 class FileControllerTest extends CIUnitTestCase {
-    // use ControllerTestTrait;
-    use FeatureTestTrait;
+    use ControllerTestTrait;
 
-    public function mockUpload($path='/') {
-        if (!$path[0] == '/' && strlen($path) > 1) $path = '/' . $path;
+    private function uploadFile($path='', $fileName='test.txt') {
+        $curlFile = new \CURLStringFile('Uploaded file', $fileName, 'text/plain');
 
-        // Create a temporary file to simulate the uploaded file
-        $tempFilePath = tempnam(sys_get_temp_dir(), 'upload_test');
-        file_put_contents($tempFilePath, 'test data');
-
-        // Create an UploadedFile instance
-        $file = [
-            'name' => 'test.txt',
-            'type' => 'text/plain',
-            'tmp_name' => $tempFilePath,
-            'error' => 0,
-        ];
-        
-        $result = $this->post("api/upload$path", [
-            'file' => $file
+        $ch = curl_init("http://localhost:8080/api/upload/$path");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, [
+            'files[]' => $curlFile,
         ]);
-    
-        unlink($tempFilePath);
-        return $result;
+
+        curl_exec($ch);
+        curl_close($ch);
+        return curl_getinfo($ch);
     }
 
-    public function testFileUpload()
-    {        
-        $result = $this->mockUpload();
-        $result->assertOK();
-
+    public function testFileUpload() {
         $filePath = Storage::getStoragePath('test.txt');
+        $result = $this->uploadFile();
+        $this->assertEquals(200, $result['http_code']);
+        $this->assertFileExists($filePath);
         unlink($filePath);
     }
 
     public function testFileUploadWhenFileExists() {
-        $path = Storage::getStoragePath('test.txt');
-        file_put_contents($path, 'hello!');
-        $result = $this->mockUpload();
-        $result->assertOK();
+        $existingFile = Storage::getStoragePath('test.txt');
+        $uploadedFilePath = Storage::getStoragePath('test_1.txt');
+        file_put_contents($existingFile, 'hello!');
+        
+        $result = $this->uploadFile();
+        
+        $this->assertEquals(200, $result['http_code']);
+        $this->assertFileExists($uploadedFilePath);
 
-        unlink($path);
+        unlink($existingFile);
+        unlink($uploadedFilePath);
     }
 
     public function testFileUploadToDirectory() {
         $uploadTestDir = '/upload-test';
-        $dirPath = Storage::$root . $uploadTestDir;
+        $dirPath = Storage::getStoragePath($uploadTestDir);
+        $uploadedFilePath = "$dirPath/test.txt";
         if (!is_dir($dirPath)) mkdir($dirPath);
 
-        $result = $this->mockUpload($uploadTestDir);
-        $result->assertOK();
+        $result = $this->uploadFile(path: $uploadTestDir);
+        $this->assertEquals(200, $result['http_code']);
         
-        $result = $this->mockUpload('/non-existent');
-        $result->assertStatus(500);
+        $result = $this->uploadFile(path: 'non-existent');
+        $this->assertEquals(500, $result['http_code']);
 
+        unlink($uploadedFilePath);
         rmdir($dirPath);
     }
 
     public function testFileCreation() {
-        $result = $this->post('api/create/test.txt');
+        $result = $this->withUri('http://localhost:8080/api/create/test.txt')
+            ->controller(FileController::class)
+            ->execute('create', 'test.txt');
         $result->assertOK();
     }
 
@@ -78,9 +73,11 @@ class FileControllerTest extends CIUnitTestCase {
         $testPath = Storage::getStoragePath('test.txt');
         file_put_contents($testPath, 'Hello world!');
 
-        $result = $this->post('api/delete/test.txt');
-        $result->assertOK();
+        $result = $this->withUri('http://localhost:8080/api/delete/test.txt')
+            ->controller(FileController::class)
+            ->execute('delete', 'test.txt');
 
-        if (file_exists($testPath)) unlink($testPath);
+        $result->assertOK();
+        $this->assertFileDoesNotExist($testPath);
     }   
 }
