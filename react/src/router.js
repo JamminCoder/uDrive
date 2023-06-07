@@ -11,6 +11,12 @@ const router = createBrowserRouter([
         path: '/storage/*',
         element: <App />,
     },
+
+    // This is temporary
+    {
+        path: '/index.php',
+        element: <App />
+    }
 ]);
 
 
