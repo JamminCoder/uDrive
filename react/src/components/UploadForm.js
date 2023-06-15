@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { getStoragePath } from '../utils';
 import Error from './Error';
+import Csrf from './Csrf';
 
 const storagePath = getStoragePath();
 const uploadPath = `/api/upload${ storagePath }`;
@@ -57,7 +58,6 @@ export function UploadFolderButton() {
     function uploadFolder(e) {
         e.preventDefault();
         const uploadForm = document.querySelector('#uploadForm');
-        const folderInput = uploadForm.querySelector(`input#${ id }`);
         const formData = new FormData(uploadForm);
 
         axios.post(uploadDirPath, formData)
@@ -94,6 +94,7 @@ export function UploadFolderButton() {
 export default function UploadForm() {
     return (
     <form id='uploadForm' action={ uploadPath } method='POST' encType="multipart/form-data" className='relative grid gap-4'>
+        <Csrf/>
         <UploadFileButton/>
         <UploadFolderButton/>
     </form>

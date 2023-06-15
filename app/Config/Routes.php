@@ -14,6 +14,8 @@ $routes->setDefaultNamespace('App\Controllers');
 $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
+
+service('auth')->routes($routes);
 $routes->set404Override(function () {
     echo view('react');
 });
