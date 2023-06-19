@@ -43,6 +43,7 @@ $routes->group('api', static function ($routes) {
     $routes->get('delete/(:any)', 'FileController::delete/$1');
     
     $routes->post('dir/upload', 'DirController::upload');
+    $routes->post('dir/upload/(:any)', 'DirController::upload/$1');
     $routes->post('dir/create/(:any)', 'DirController::create/$1');
     $routes->delete('dir/delete/(:any)', 'DirController::delete/$1');
     $routes->post('dir/delete/(:any)', 'DirController::delete/$1');

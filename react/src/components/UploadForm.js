@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { getStoragePath } from '../utils';
 import Error from './Error';
-import Csrf from './Csrf';
+
 
 const storagePath = getStoragePath();
 const uploadPath = `/api/upload${ storagePath }`;
