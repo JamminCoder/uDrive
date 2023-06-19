@@ -8,6 +8,10 @@ export function getStoragePath() {
     return '/';
 }
 
+export function isLoggedIn() {
+    return document.querySelector('meta[name="auth_status"]').getAttribute('content') === '1';
+}
+
 export function preventDefaults(e) {
     e.preventDefault();
     e.stopPropagation();

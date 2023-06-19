@@ -3,10 +3,12 @@ import Sidebar from '../components/Sidebar';
 import axios from 'axios';
 import { RenderFiles } from '../components/Files';
 import { getStoragePath } from '../utils';
+import Error from '../components/Error';
 
 
 export default function App() {
     const [files, setFiles] = useState();
+    const [error, setError] = useState(null);
     const storagePath = getStoragePath();
 
     useEffect(() => {
@@ -14,7 +16,10 @@ export default function App() {
         .then(res => {
             if (res.data.files) setFiles(res.data.files);
         })
-        .catch(console.error);
+        .catch(err => {
+            console.error(err);
+            setError(err.message);
+        });
     }, []);
 
     return (
@@ -31,6 +36,7 @@ export default function App() {
                     <RenderFiles files={ files } />
                 </section>
             </main>
+            <Error>{ error }</Error>
         </div>
     );
 }
