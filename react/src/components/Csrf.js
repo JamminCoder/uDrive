@@ -12,6 +12,10 @@ export function setFormCsrf(formData) {
     formData.set(getCsrfName(), getCsrfValue());
 }
 
+export function getCsrfHeader() {
+    return { "X-CSRF-TOKEN": getCsrfValue() };
+}
+
 export default function Csrf()  {
     return <input type='hidden' name={ getCsrfName() } value={ getCsrfValue() } />
 }

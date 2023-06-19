@@ -94,7 +94,6 @@ export function UploadFolderButton() {
 export default function UploadForm() {
     return (
     <form id='uploadForm' action={ uploadPath } method='POST' encType="multipart/form-data" className='relative grid gap-4'>
-        <Csrf/>
         <UploadFileButton/>
         <UploadFolderButton/>
     </form>

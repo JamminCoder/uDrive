@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useContextMenu } from './ContextMenu';
 import Error from './Error';
 import { 

@@ -4,6 +4,10 @@ import {
     RouterProvider
 } from 'react-router-dom';
 import router from './router';
+import axios from 'axios';
+
+import { getCsrfHeader } from './components/Csrf';
+axios.defaults.headers = getCsrfHeader();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
