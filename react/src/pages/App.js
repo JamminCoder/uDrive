@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
-import axios from 'axios';
 import { RenderFiles } from '../components/Files';
 import { getStoragePath } from '../utils';
 import Error from '../components/Error';
+import { listDir } from '../api/storage';
 
 
 export default function App() {
@@ -12,14 +12,10 @@ export default function App() {
     const storagePath = getStoragePath();
 
     useEffect(() => {
-        axios.get('/api/storage' + storagePath)
-        .then(res => {
-            if (res.data.files) setFiles(res.data.files);
-        })
-        .catch(err => {
-            console.error(err);
-            setError(err.message);
-        });
+        listDir(storagePath)
+        .then(listings => {
+            setFiles(listings);
+        }).catch(err => setError(err.message));
     }, []);
 
     return (

@@ -22,3 +22,9 @@ export async function deleteDirectory(dirPath) {
         return err 
     };
 }
+
+
+export async function listDir(dirPath='/') {
+    const res = await axios.get('/api/storage/' + dirPath);
+    return res.data.files ?? null;
+}
