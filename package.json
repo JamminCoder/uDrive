@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx webpack --watch & npx tailwindcss -i ./react/css/input.css -o ./public/css/tailwind.css --watch --minify & php spark serve"
+    "dev": "php spark serve & npx webpack --watch",
+    "css": "npx tailwindcss -i ./react/css/input.css -o ./public/css/tailwind.css --watch --minify"
   },
   "keywords": [],
   "author": "",

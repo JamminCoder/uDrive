@@ -38,8 +38,9 @@ export function Dir({ dir }) {
 
     return (
         <div
-            onContextMenu={ handleContextMenu } 
-            className='hasContextMenu bg-blue-200 p-2 rounded border block'>
+            onContextMenu={ handleContextMenu }
+            onClick={() => window.location.href = itemUrl }
+            className='hasContextMenu bg-blue-200 btn block'>
             <a href={ itemUrl }>
                 { dir.name }
             </a>
@@ -80,7 +81,8 @@ export function File({ file }) {
     return (
         <div
             onContextMenu={ handleContextMenu }
-            className='hasContextMenu bg-blue-50 p-2 rounded border flex justify-between text-sm w-96'>
+            onClick={() => window.location.href = fileUrl }
+            className='hasContextMenu bg-blue-50 btn flex justify-between text-sm w-96'>
             <a href={ fileUrl } >
                 { truncatedName }
             </a>
