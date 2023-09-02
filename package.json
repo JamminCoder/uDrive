@@ -10,7 +10,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "php spark serve & npx webpack --watch",
-    "css": "npx tailwindcss -i ./react/css/input.css -o ./public/css/tailwind.css --watch --minify"
+    "css": "npx tailwindcss -i ./react/css/input.css -o ./public/css/tailwind.css --watch --minify",
+    "webpack": "npx webpack --watch"
   },
   "keywords": [],
   "author": "",

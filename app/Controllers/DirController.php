@@ -29,31 +29,26 @@ class DirController extends BaseController {
         if (!is_dir($absPath)) 
             return $this->response->setStatusCode(500, 'Path does not exist.');
         
-        self::uploadDir($absPath, $_FILES['folder']);
+        $files = $this->request->getFiles();
+        foreach ($files["folder"] as $file) {
+            // The final path when the file is uploaded
+            $fullUploadedFilePath = $absPath . DIRECTORY_SEPARATOR . $file->getClientPath();
+
+            $uploadDir = self::chompFileName($fullUploadedFilePath);
+            
+            // Make new directory if needed.
+            if (!is_dir($uploadDir)) mkdir($uploadDir, recursive: true);
+
+            $file->move($fullUploadedFilePath);
+        }
 
         return $this->response->setJSON(["status" => "success"]);
     }
 
 
-    private static function uploadDir($baseUploadPath, $files) {
-        foreach ($files['name'] as $index => $file) {
-            // Get the webkitRelativePath for this file
-            $relativeFilePath = $files['full_path'][$index];
-
-            // The final path when the file is uploaded
-            $uploadPath = $baseUploadPath . DIRECTORY_SEPARATOR . $relativeFilePath;
-
-            // Get the directory to where the file should be uploaded
-            $explodedPath = explode(DIRECTORY_SEPARATOR, $uploadPath);
-            array_pop($explodedPath);
-            $dirPath = join(DIRECTORY_SEPARATOR, $explodedPath);
-            
-            if (!is_dir($dirPath)) mkdir($dirPath, recursive: true);
-            
-            // Upload it
-            $tmpPath = $files['tmp_name'][$index];
-            move_uploaded_file($tmpPath, $uploadPath);
-        }
+    private static function chompFileName($filePath) {
+        $explodedPath = explode(DIRECTORY_SEPARATOR, $filePath);
+        array_pop($explodedPath);
+        return join(DIRECTORY_SEPARATOR, $explodedPath);
     }
-
 }
